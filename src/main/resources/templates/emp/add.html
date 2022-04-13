@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>新增员工</title>
+    <link href="asserts/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/4.0.0/css/bootstrap.css}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="asserts/css/dashboard.css" th:href="@{/asserts/css/dashboard.css}" rel="stylesheet">
+    <style type="text/css">
+        /* Chart.js */
+
+        @-webkit-keyframes chartjs-render-animation {
+            from {
+                opacity: 0.99
+            }
+            to {
+                opacity: 1
+            }
+        }
+
+        @keyframes chartjs-render-animation {
+            from {
+                opacity: 0.99
+            }
+            to {
+                opacity: 1
+            }
+        }
+
+        .chartjs-render-monitor {
+            -webkit-animation: chartjs-render-animation 0.001s;
+            animation: chartjs-render-animation 0.001s;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="common/nav::topbar"></div>
+
+<div class="container-fluid">
+    <div class="row">
+        <!--引入侧边栏-->
+        <div th:replace="common/nav::#sideber(activeUrl='/list')"></div>
+
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+            <form th:action="@{/emp/emps}" method="post">
+                <!--需要区分是员工修改还是新增员工-->
+                <!--发送put请求添加数据-->
+                <!--
+                1、SpringMVC中配置HiddenHttpMethodFilter;(SpringBoot1.x自动配置好的,2.x中spring.mvc.hiddenmethod.filter.enabled默认为false 需要启动才能使用put请求
+                2、页面创建一个post表单
+                3、创建一个input项 name='method';值就是我们指定的请求方式
+                -->
+                <input type="hidden" name="_method" th:if="${method!=null}" th:value="${method}">
+
+                <div class="form-group">
+                    <label for="exampleInputLastName">LastName</label>
+                    <input type="hidden" name="id" class="form-control" th:value="${emp!=null}?${emp.getId()}" >
+                    <input type="name" name="lastName" class="form-control" id="exampleInputLastName"
+                         th:value="${emp!=null}?${emp.getLastName()}"  placeholder="lastName">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail">Email</label>
+                    <input type="email" name="email" th:value="${emp!=null}?${emp.email}" class="form-control" id="exampleInputEmail" placeholder="email">
+                </div>
+                <div class="form-group">
+                    <label class="radio-inline" for="exampleInputEmail">Gender</label>
+                    <br/>
+                    <label class="radio-inline">
+                        <input type="radio" name="gender" id="exampleInputGender1" value="1" th:checked="${emp!=null}?${emp.getGender() == 1}"> 男
+                    </label>
+                    <label class="radio-inline ">
+                        <input type="radio" name="gender" id="exampleInputGender2" value="0" th:checked="${emp!=null}?${emp.getGender() == 0}"> 女
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label>departmentName</label>
+                    <select class="form-control" name="department.id">
+                        <option th:selected="${emp!=null}?${emp.department.id == dept.getId()}" th:each="dept:${depts}" th:value="${dept.id}">[[${dept.departmentName}]]</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputCreateDatetime">Birth</label>
+                    <input name="birth"  type="date" th:value="${emp!=null}?${#dates.format(emp.getBirth(),'yyyy-MM-dd')}" class="form-control" id="exampleInputCreateDatetime">
+                </div>
+                <button type="submit" class="btn btn-default" th:text="${method !=null ? '修改完成' : '提交'}"></button>
+            </form>
+        </main>
+    </div>
+</div>
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script type="text/javascript" src="asserts/js/jquery-3.2.1.slim.min.js"
+        th:src="@{/webjars/jquery/3.3.1/jquery.js}"></script>
+<script type="text/javascript" src="asserts/js/popper.min.js"
+        th:src="@{/webjars/popper.js/1.11.1/dist/popper.js}"></script>
+<script type="text/javascript" src="asserts/js/bootstrap.min.js"
+        th:src="@{/webjars/bootstrap/4.0.0/js/bootstrap.js}"></script>
+
+<!-- Icons -->
+<script type="text/javascript" src="asserts/js/feather.min.js" th:src="@{/asserts/js/feather.min.js}"></script>
+<script>
+    feather.replace()
+</script>
+
+</body>
+</html>

@@ -1,0 +1,31 @@
+spring:
+  datasource:
+    username: root
+    password: 70wzdxhn
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/test
+    hikari:
+      maximum-pool-size: 50
+      minimum-idle: 5
+
+    type: com.zaxxer.hikari.HikariDataSource
+  jpa:
+    # 显示jpa生成的sql
+    show-sql: true
+    # 选择数据库方言
+    database-platform: org.hibernate.dialect.MySQLDialect
+    # 选择hibernate的ddl的策略为update
+    hibernate:
+      ddl-auto: update
+mybatis:
+  # MyBatis 映射配置
+  mapper-locations: classpath:mapping/*Mapper.xml
+  # MyBatis POJO配置
+  type-aliases-package: cn.com.springday3jdbc.pojo1
+  # MyBatis typeHandler配置
+  type-handlers-package: cn.com.springday3jdbc.component.typeHandler
+logging:
+  level:
+    root: info
+    org.springframework: info
+    cn.com.springday3jdbc: debug
